@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "context7": {
+      "url": "https://mcp.context7.com/mcp"
+    },
+
+    "microsoft-docs": {
+      "url": "https://learn.microsoft.com/api/mcp"
+    },
+
+    "azure": {
+      "command": "npx",
+      "args": ["-y", "@azure/mcp@latest", "server", "start"]
+    },
+
+    "awesome-copilot": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "ghcr.io/microsoft/mcp-dotnet-samples/awesome-copilot:latest"]
+    }
+  }
+}

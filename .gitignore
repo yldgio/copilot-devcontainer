@@ -1,0 +1,18 @@
+# Skills are populated at container creation from github/awesome-copilot
+skills/
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.uv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code / editor
+PowerShellEditorServices.json
