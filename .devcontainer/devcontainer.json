@@ -32,7 +32,7 @@
   },
 
   // Runs once after the container is created.
-  // Installs UV, Copilot CLI, and clones the skills catalogue into skills/ at the project root.
+  // Installs UV, GitHub Copilot CLI, and generates .vscode/mcp.json from .mcp.json.
   // MCP servers are pre-configured in .mcp.json. Plugins are installed post-login via the CLI.
   "postCreateCommand": "bash .devcontainer/setup.sh",
 

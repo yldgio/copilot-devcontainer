@@ -3,24 +3,37 @@
 set -euo pipefail
 
 WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+INSTALL_BIN="$HOME/.local/bin"
 
 echo "━━━ Copilot Dev Container Setup ━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 # ── 1. PATH ─────────────────────────────────────────────────────────────────
-export PATH="$HOME/.local/bin:$PATH"
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+mkdir -p "$INSTALL_BIN"
+export PATH="$INSTALL_BIN:$PATH"
+# Persist for future interactive shells — guard against duplicate entries.
+if ! grep -qF "$INSTALL_BIN" "$HOME/.bashrc" 2>/dev/null; then
+  echo "export PATH=\"$INSTALL_BIN:\$PATH\"" >> "$HOME/.bashrc"
+fi
 
 # ── 2. UV (Python package manager) ─────────────────────────────────────────
 echo "  › Installing UV..."
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # ── 3. GitHub Copilot CLI ───────────────────────────────────────────────────
-# Official install script from https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli
-# Installs the binary to $HOME/.local/bin (default for non-root users).
+# Official binary installer: https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli
+# We always run the install — it replaces any existing binary safely.
+# PREFIX is set explicitly so the binary always lands in $HOME/.local/bin,
+# regardless of how id -u behaves inside the container.
 echo "  › Installing GitHub Copilot CLI..."
+PREFIX="$HOME/.local" curl -fsSL https://gh.io/copilot-install | bash
+
+# Verify the binary is reachable.
 if ! command -v copilot &>/dev/null; then
-  curl -fsSL https://gh.io/copilot-install | bash
+  echo "⚠️  copilot not found in PATH after install. Binary should be at $INSTALL_BIN/copilot"
+  ls -la "$INSTALL_BIN/copilot" 2>/dev/null || echo "   Binary missing — install may have failed."
+  exit 1
 fi
+echo "  ✓ copilot $(copilot --version 2>/dev/null || echo '(version unavailable)') at $(command -v copilot)"
 
 # ── 4. VS Code MCP config (generated from .mcp.json) ───────────────────────
 # .mcp.json is the single source of truth (Copilot CLI uses "mcpServers").
