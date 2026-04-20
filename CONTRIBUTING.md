@@ -54,7 +54,8 @@ Use the [Feature Request](.github/ISSUE_TEMPLATE/feature_request.md) issue templ
 ### setup.sh
 
 - The script runs **once** on container creation (`postCreateCommand`). Keep it idempotent.
-- Network downloads should be guarded with existence checks (e.g. `if ! command -v uv`).
+- Network downloads should be guarded with existence checks (e.g. `if ! command -v copilot`).
+- Additional optional setup lives in `.devcontainer/scripts/` — do not add non-essential steps to `setup.sh` itself.
 
 ### MCP servers
 

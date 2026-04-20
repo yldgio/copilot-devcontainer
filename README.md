@@ -20,8 +20,7 @@ A reusable dev container for AI-assisted development with GitHub Copilot CLI, pr
 | Tool | How |
 |------|-----|
 | **UV** | `curl https://astral.sh/uv/install.sh` → `~/.local/bin/uv` |
-| **GitHub Copilot CLI** | `npm install -g @github/copilot` |
-| **Skills catalogue** | sparse-clone of `github/awesome-copilot` → `skills/` |
+| **GitHub Copilot CLI** | official installer `curl -fsSL https://gh.io/copilot-install \| bash` → `~/.local/bin/copilot` |
 
 ### VS Code extensions
 
@@ -50,7 +49,13 @@ A reusable dev container for AI-assisted development with GitHub Copilot CLI, pr
 
 ### Skills catalogue
 
-Sparse-cloned from `github/awesome-copilot` into `skills/` at the workspace root. The Copilot CLI auto-discovers this directory (v1.0.11+).
+Not installed automatically. Run the optional script when needed:
+
+```bash
+bash .devcontainer/scripts/install-skills.sh
+```
+
+This sparse-clones `github/awesome-copilot` into `skills/` at the workspace root. The Copilot CLI auto-discovers this directory (v1.0.11+). The `skills/` directory is excluded from git.
 
 ---
 
@@ -59,8 +64,8 @@ Sparse-cloned from `github/awesome-copilot` into `skills/` at the workspace root
 By default the Dev Containers spec bind-mounts the folder that contains `.devcontainer/` into the container at `/workspaces/<folder-name>`. No extra configuration is needed — your files are mounted directly, nothing is copied.
 
 ```
-Host: D:\projects\copilot-devcontainer
-Container: /workspaces/copilot-devcontainer   (bind-mounted)
+Host: <your project folder>
+Container: /workspaces/<folder-name>   (bind-mounted)
 ```
 
 To use this dev container with a different project, copy the `.devcontainer/` folder into that project's root and rebuild.
@@ -90,10 +95,11 @@ copilot
 /login
 ```
 
-### 3. (Optional) install extra plugins
+### 3. (Optional) install skills and plugins
 
 ```bash
-copilot plugin install anvil@awesome-copilot
+bash .devcontainer/scripts/install-skills.sh   # skills catalogue
+bash .devcontainer/scripts/install-plugins.sh  # Copilot CLI plugins (requires login first)
 ```
 
 ### 4. Use MCP servers
