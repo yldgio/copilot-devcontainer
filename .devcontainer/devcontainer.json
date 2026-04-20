@@ -12,10 +12,7 @@
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.12"
     },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "enableNonRootDocker": "true",
-      "moby": "true"
-    }
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
 
   "customizations": {
@@ -38,6 +35,10 @@
   // Installs UV, Copilot CLI, and clones the skills catalogue into skills/ at the project root.
   // MCP servers are pre-configured in .mcp.json. Plugins are installed post-login via the CLI.
   "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
+  },
 
   "remoteUser": "vscode"
 }

@@ -16,3 +16,6 @@ Thumbs.db
 
 # VS Code / editor
 PowerShellEditorServices.json
+
+# Generated inside the dev container from .mcp.json
+.vscode/mcp.json
