@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Removed `python:1` devcontainer feature — Python 3.12 now installed and managed by UV (`uv python install 3.12`), removing the redundant double install
+
 ## [1.1.0] - 2026-04-20
 
 ### Changed

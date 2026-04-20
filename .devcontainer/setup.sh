@@ -15,9 +15,12 @@ if ! grep -qF "$INSTALL_BIN" "$HOME/.bashrc" 2>/dev/null; then
   echo "export PATH=\"$INSTALL_BIN:\$PATH\"" >> "$HOME/.bashrc"
 fi
 
-# ── 2. UV (Python package manager) ─────────────────────────────────────────
+# ── 2. UV + Python ─────────────────────────────────────────────────────────
 echo "  › Installing UV..."
 curl -LsSf https://astral.sh/uv/install.sh | sh
+
+echo "  › Installing Python 3.12 via UV..."
+uv python install 3.12
 
 # ── 3. GitHub Copilot CLI ───────────────────────────────────────────────────
 # Official binary installer: https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli

@@ -4,7 +4,7 @@ Dev container for AI-assisted development with GitHub Copilot CLI.
 
 ## Environment
 
-- Ubuntu 24.04 | Node LTS | Python 3.12 | Git | GitHub CLI (`gh`)
+- Ubuntu 24.04 | Node LTS | Python 3.12 (via UV) | Git | GitHub CLI (`gh`)
 - Docker CLI via host socket (`docker-outside-of-docker`) — no daemon inside the container
 - UV at `~/.local/bin/uv`
 - GitHub Copilot CLI: `copilot` — authenticate with `/login` on first use

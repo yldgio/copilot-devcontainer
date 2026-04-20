@@ -12,7 +12,6 @@ A reusable dev container for AI-assisted development with GitHub Copilot CLI, pr
 | Git | 1.x |
 | GitHub CLI (`gh`) | 1.x |
 | Node.js | LTS |
-| Python | 3.12 |
 | Docker CLI | docker-outside-of-docker |
 
 ### Tools installed on first creation (`setup.sh`)
@@ -20,6 +19,7 @@ A reusable dev container for AI-assisted development with GitHub Copilot CLI, pr
 | Tool | How |
 |------|-----|
 | **UV** | `curl https://astral.sh/uv/install.sh` → `~/.local/bin/uv` |
+| **Python 3.12** | `uv python install 3.12` (managed by UV) |
 | **GitHub Copilot CLI** | official installer `curl -fsSL https://gh.io/copilot-install \| bash` → `~/.local/bin/copilot` |
 
 ### VS Code extensions
