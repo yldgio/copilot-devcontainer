@@ -20,7 +20,7 @@ You will receive an acknowledgment within **72 hours** and a resolution or mitig
 
 ## Security considerations for this project
 
-- **MCP servers**: HTTP-based servers (`context7`, `microsoft-docs`) communicate over TLS. Stdio-based servers (`azure`, `awesome-copilot`) run as child processes inside the container with no elevated privileges.
+- **MCP servers**: HTTP-based servers (`context7`, `microsoft-docs`) communicate over TLS with no credentials stored locally.
 - **Docker socket**: `docker-outside-of-docker` mounts the host's `/var/run/docker.sock`. This gives the container full control over the host Docker daemon — be aware of this when using the container in sensitive environments.
-- **`setup.sh`**: Downloads external resources (`uv` installer, npm package, git clone). Review the script before running it in regulated environments.
+- **`setup.sh`**: Downloads external resources (`uv` installer, Copilot CLI binary). Review the script before running it in regulated environments.
 - **Secrets**: Never commit tokens, credentials, or API keys. Use environment variables or a secrets manager.

@@ -32,10 +32,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Removed `python:1` devcontainer feature — Python 3.12 now installed and managed by UV (`uv python install 3.12`), removing the redundant double install
 - Removed `azure` and `awesome-copilot` MCP servers from `.mcp.json`
+- Removed `install-skills.sh` — skills catalogue not included; use a custom script if needed
 
 ### Removed
 
 - `devcontainer-lock.json` removed from version control (regenerated automatically by VS Code)
+- `install-skills.sh` script removed from `.devcontainer/scripts/`
 
 ## [1.1.0] - 2026-04-20
 

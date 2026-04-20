@@ -21,7 +21,3 @@ Host project folder is bind-mounted at `/workspaces/copilot-devcontainer`. Files
 | `microsoft-docs` | HTTP | Microsoft Learn |
 
 Config: `.mcp.json` (CLI) and `.vscode/mcp.json` (VS Code Copilot Chat).
-
-## Skills
-
-`skills/` is **not installed by default** — run `.devcontainer/scripts/install-skills.sh` to clone it. Auto-discovered by Copilot CLI when present.

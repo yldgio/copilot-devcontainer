@@ -43,16 +43,6 @@ A reusable dev container for AI-assisted development with GitHub Copilot CLI, pr
 | `context7` | HTTP | Library and framework documentation |
 | `microsoft-docs` | HTTP | Microsoft Learn documentation |
 
-### Skills catalogue
-
-Not installed automatically. Run the optional script when needed:
-
-```bash
-bash .devcontainer/scripts/install-skills.sh
-```
-
-This sparse-clones `github/awesome-copilot` into `skills/` at the workspace root. The Copilot CLI auto-discovers this directory (v1.0.11+). The `skills/` directory is excluded from git.
-
 ---
 
 ## Workspace mount
@@ -134,8 +124,7 @@ $env:DEVCONTAINER_VERSION = "v1.0.0"; irm https://raw.githubusercontent.com/yldg
 |------|-------------|
 | `.devcontainer/devcontainer.json` | Container definition |
 | `.devcontainer/setup.sh` | Post-create setup script |
-| `.devcontainer/scripts/install-skills.sh` | Optional: install Copilot skills |
-| `.devcontainer/scripts/install-plugins.sh` | Optional: install Copilot plugins |
+| `.devcontainer/scripts/install-plugins.sh` | Optional: install Copilot CLI plugins |
 | `.mcp.json` | MCP server configuration |
 
 The installer aborts if `.devcontainer/` already exists. Use `--force` / `-Force` to overwrite.
@@ -165,13 +154,12 @@ copilot
 /login
 ```
 
-### 3. (Optional) install skills and plugins
+### 3. (Optional) install plugins
 
 ```bash
-bash .devcontainer/scripts/install-skills.sh   # skills catalogue
 bash .devcontainer/scripts/install-plugins.sh  # Copilot CLI plugins (requires login first)
 ```
 
 ### 4. Use MCP servers
 
-MCP servers are available immediately in both the Copilot CLI and VS Code Copilot Chat. Servers that require `docker` or `npx` work out of the box thanks to the pre-installed toolchain.
+MCP servers are available immediately in both the Copilot CLI and VS Code Copilot Chat.

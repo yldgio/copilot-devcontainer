@@ -1,6 +1,3 @@
-# Skills catalogue — installed manually via .devcontainer/scripts/install-skills.sh
-skills/
-
 # Node
 node_modules/
 
