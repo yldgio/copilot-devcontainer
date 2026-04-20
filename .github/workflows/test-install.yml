@@ -87,6 +87,7 @@ jobs:
           pwsh -NonInteractive -File "$env:GITHUB_WORKSPACE\install.ps1" -Version "${{ github.sha }}"
           if ($LASTEXITCODE -eq 1) {
             Write-Host "✅ abort-on-conflict verified"
+            exit 0  # clear $LASTEXITCODE so the step doesn't fail
           } else {
             Write-Error "Expected abort (exit 1) but got: $LASTEXITCODE"
             exit 1

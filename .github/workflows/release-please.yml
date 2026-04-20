@@ -12,6 +12,10 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      # Requires one of:
+      #   (a) Repo Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests" ✓
+      #   (b) A PAT stored as Actions secret RELEASE_PLEASE_TOKEN with repo + PR permissions
       - uses: googleapis/release-please-action@v4
         with:
           release-type: node
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
