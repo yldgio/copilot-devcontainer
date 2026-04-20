@@ -19,8 +19,6 @@ Host project folder is bind-mounted at `/workspaces/copilot-devcontainer`. Files
 |------|-----------|-------|
 | `context7` | HTTP | Library docs |
 | `microsoft-docs` | HTTP | Microsoft Learn |
-| `azure` | npx | Azure CLI ops |
-| `awesome-copilot` | Docker | Copilot skills |
 
 Config: `.mcp.json` (CLI) and `.vscode/mcp.json` (VS Code Copilot Chat).
 

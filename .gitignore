@@ -14,6 +14,9 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Dev container lock — regenerated automatically by VS Code on first build
+.devcontainer/devcontainer-lock.json
+
 # VS Code / editor
 PowerShellEditorServices.json
 

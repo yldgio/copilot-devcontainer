@@ -1,0 +1,101 @@
+name: Test Installers
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-node:
+    name: Test npx (Node.js)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run install.mjs in empty directory
+        run: |
+          mkdir /tmp/test-node
+          cd /tmp/test-node
+          node "$GITHUB_WORKSPACE/install.mjs"
+          test -d .devcontainer
+          test -f .devcontainer/devcontainer.json
+          test -f .devcontainer/setup.sh
+          test -f .mcp.json
+          echo "✅ node install test passed"
+      - name: Verify abort when .devcontainer exists
+        run: |
+          cd /tmp/test-node
+          node "$GITHUB_WORKSPACE/install.mjs" && exit 1 || echo "✅ abort-on-conflict verified"
+      - name: Verify --force overwrites
+        run: |
+          cd /tmp/test-node
+          node "$GITHUB_WORKSPACE/install.mjs" --force
+          test -f .devcontainer/devcontainer.json
+          echo "✅ --force overwrite verified"
+
+  test-bash:
+    name: Test bash installer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run install.sh (downloads current commit)
+        run: |
+          mkdir /tmp/test-bash
+          cd /tmp/test-bash
+          bash "$GITHUB_WORKSPACE/install.sh" --version "${{ github.sha }}"
+          test -d .devcontainer
+          test -f .devcontainer/devcontainer.json
+          test -f .devcontainer/setup.sh
+          test -f .mcp.json
+          echo "✅ bash install test passed"
+      - name: Verify abort when .devcontainer exists
+        run: |
+          cd /tmp/test-bash
+          bash "$GITHUB_WORKSPACE/install.sh" --version "${{ github.sha }}" && exit 1 || echo "✅ abort-on-conflict verified"
+      - name: Verify --force overwrites
+        run: |
+          cd /tmp/test-bash
+          bash "$GITHUB_WORKSPACE/install.sh" --version "${{ github.sha }}" --force
+          test -f .devcontainer/devcontainer.json
+          echo "✅ --force overwrite verified"
+
+  test-powershell:
+    name: Test PowerShell installer
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run install.ps1 (downloads current commit)
+        shell: pwsh
+        run: |
+          $TestDir = "$env:TEMP\test-ps"
+          New-Item -ItemType Directory -Path $TestDir | Out-Null
+          Set-Location $TestDir
+          & "$env:GITHUB_WORKSPACE\install.ps1" -Version "${{ github.sha }}"
+          if (-not (Test-Path ".devcontainer")) { Write-Error "missing .devcontainer"; exit 1 }
+          if (-not (Test-Path ".devcontainer\devcontainer.json")) { Write-Error "missing devcontainer.json"; exit 1 }
+          if (-not (Test-Path ".mcp.json")) { Write-Error "missing .mcp.json"; exit 1 }
+          Write-Host "✅ PowerShell install test passed"
+      - name: Verify abort when .devcontainer exists
+        shell: pwsh
+        run: |
+          $TestDir = "$env:TEMP\test-ps"
+          Set-Location $TestDir
+          # Call as subprocess so exit 1 doesn't terminate this session
+          pwsh -NonInteractive -File "$env:GITHUB_WORKSPACE\install.ps1" -Version "${{ github.sha }}"
+          if ($LASTEXITCODE -eq 1) {
+            Write-Host "✅ abort-on-conflict verified"
+          } else {
+            Write-Error "Expected abort (exit 1) but got: $LASTEXITCODE"
+            exit 1
+          }
+      - name: Verify -Force overwrites
+        shell: pwsh
+        run: |
+          $TestDir = "$env:TEMP\test-ps"
+          Set-Location $TestDir
+          & "$env:GITHUB_WORKSPACE\install.ps1" -Version "${{ github.sha }}" -Force
+          if (-not (Test-Path ".devcontainer\devcontainer.json")) { Write-Error "missing devcontainer.json"; exit 1 }
+          Write-Host "✅ -Force overwrite verified"

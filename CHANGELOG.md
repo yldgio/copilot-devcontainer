@@ -6,9 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Remote installer: `install.mjs` (npx), `install.sh` (bash), `install.ps1` (PowerShell) — copies devcontainer files into any repo with a one-liner
+- `package.json` — enables `npx github:yldgio/copilot-devcontainer` invocation
+- GitHub Actions: `release-please.yml` (automated versioning) and `test-install.yml` (CI tests for all 3 installers)
+
 ### Changed
 
 - Removed `python:1` devcontainer feature — Python 3.12 now installed and managed by UV (`uv python install 3.12`), removing the redundant double install
+- Removed `azure` and `awesome-copilot` MCP servers from `.mcp.json`
+
+### Removed
+
+- `devcontainer-lock.json` removed from version control (regenerated automatically by VS Code)
 
 ## [1.1.0] - 2026-04-20
 

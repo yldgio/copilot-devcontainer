@@ -42,10 +42,6 @@ A reusable dev container for AI-assisted development with GitHub Copilot CLI, pr
 |--------|-----------|---------|
 | `context7` | HTTP | Library and framework documentation |
 | `microsoft-docs` | HTTP | Microsoft Learn documentation |
-| `azure` | stdio / npx | Azure CLI operations |
-| `awesome-copilot` | stdio / Docker | Copilot skills catalogue |
-
-> **Note:** `awesome-copilot` requires Docker. It works because the container uses `docker-outside-of-docker` (see below).
 
 ### Skills catalogue
 
@@ -68,7 +64,81 @@ Host: <your project folder>
 Container: /workspaces/<folder-name>   (bind-mounted)
 ```
 
-To use this dev container with a different project, copy the `.devcontainer/` folder into that project's root and rebuild.
+To use this dev container with a different project, copy the `.devcontainer/` folder into that project's root and rebuild. See **[Install in your repo](#install-in-your-repo)** for a one-liner.
+
+---
+
+## Install in your repo
+
+Copy the devcontainer files into any existing repository without cloning this one.
+
+### npx (Node.js 18+, cross-platform)
+
+```bash
+npx github:yldgio/copilot-devcontainer
+```
+
+Pinned to a release:
+
+```bash
+npx github:yldgio/copilot-devcontainer#v1.0.0
+```
+
+With `--force` to overwrite an existing `.devcontainer/`:
+
+```bash
+npx github:yldgio/copilot-devcontainer -- --force
+```
+
+### bash (Linux / macOS)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/yldgio/copilot-devcontainer/main/install.sh | bash
+```
+
+Pinned version:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/yldgio/copilot-devcontainer/main/install.sh | bash -s -- --version v1.0.0
+```
+
+Force overwrite:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/yldgio/copilot-devcontainer/main/install.sh | bash -s -- --force
+```
+
+### PowerShell (Windows / PS 5+)
+
+```powershell
+irm https://raw.githubusercontent.com/yldgio/copilot-devcontainer/main/install.ps1 | iex
+```
+
+Pinned version (download first, then run with parameters):
+
+```powershell
+irm https://raw.githubusercontent.com/yldgio/copilot-devcontainer/main/install.ps1 -OutFile tmp_install.ps1
+.\tmp_install.ps1 -Version v1.0.0
+Remove-Item tmp_install.ps1
+```
+
+Or via environment variable:
+
+```powershell
+$env:DEVCONTAINER_VERSION = "v1.0.0"; irm https://raw.githubusercontent.com/yldgio/copilot-devcontainer/main/install.ps1 | iex
+```
+
+### What gets installed
+
+| Path | Description |
+|------|-------------|
+| `.devcontainer/devcontainer.json` | Container definition |
+| `.devcontainer/setup.sh` | Post-create setup script |
+| `.devcontainer/scripts/install-skills.sh` | Optional: install Copilot skills |
+| `.devcontainer/scripts/install-plugins.sh` | Optional: install Copilot plugins |
+| `.mcp.json` | MCP server configuration |
+
+The installer aborts if `.devcontainer/` already exists. Use `--force` / `-Force` to overwrite.
 
 ---
 

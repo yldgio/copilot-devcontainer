@@ -1,0 +1,17 @@
+{
+  "name": "copilot-devcontainer",
+  "version": "0.1.0",
+  "description": "Reusable dev container for AI-assisted development with GitHub Copilot CLI",
+  "type": "module",
+  "bin": {
+    "copilot-devcontainer": "install.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yldgio/copilot-devcontainer.git"
+  },
+  "license": "MIT"
+}
