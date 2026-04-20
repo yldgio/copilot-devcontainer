@@ -1,4 +1,4 @@
-# Skills are populated at container creation from github/awesome-copilot
+# Skills catalogue — installed manually via .devcontainer/scripts/install-skills.sh
 skills/
 
 # Node
@@ -19,3 +19,4 @@ PowerShellEditorServices.json
 
 # Generated inside the dev container from .mcp.json
 .vscode/mcp.json
+error.txt

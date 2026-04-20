@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-20
+
+### Changed
+
+- Copilot CLI install method: replaced `npm install -g @github/copilot` with the official
+  binary installer (`curl -fsSL https://gh.io/copilot-install | bash`) — no npm dependency,
+  checksum-validated, installs to `$HOME/.local/bin`
+- Skills catalogue no longer cloned automatically at container creation — left to the developer
+- `setup.sh` simplified: PATH export moved before all installs, cleaner next-steps message
+
+### Added
+
+- `.devcontainer/scripts/install-skills.sh` — optional script to clone the skills catalogue
+- `.devcontainer/scripts/install-plugins.sh` — optional script to install Copilot CLI plugins
+
 ## [1.0.0] - 2026-04-20
 
 ### Added

@@ -6,31 +6,20 @@ WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 echo "━━━ Copilot Dev Container Setup ━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# ── 1. UV (Python package manager) ─────────────────────────────────────────
-echo "  › Installing UV..."
-curl -LsSf https://astral.sh/uv/install.sh | sh
-# Make uv available for the rest of this script and for all future bash sessions.
+# ── 1. PATH ─────────────────────────────────────────────────────────────────
 export PATH="$HOME/.local/bin:$PATH"
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
 
-# ── 2. GitHub Copilot CLI ───────────────────────────────────────────────────
-echo "  › Installing GitHub Copilot CLI..."
-# Use the full package path to avoid matching unrelated 'copilot' binaries (e.g. AWS Copilot).
-if ! npm list -g @github/copilot &>/dev/null; then
-  npm install -g @github/copilot
-fi
+# ── 2. UV (Python package manager) ─────────────────────────────────────────
+echo "  › Installing UV..."
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# ── 3. Skills catalogue (project-local, auto-discovered by Copilot CLI) ────
-# Sparse-clone only the skills/ tree from github/awesome-copilot.
-# The CLI discovers skills/ at the git root automatically (v1.0.11+).
-if [ ! -d "$WORKSPACE/skills" ]; then
-  echo "  › Cloning skills catalogue..."
-  TMP=$(mktemp -d)
-  trap 'rm -rf "$TMP"' EXIT
-  git clone --depth=1 --filter=blob:none --sparse \
-    https://github.com/github/awesome-copilot.git "$TMP"
-  git -C "$TMP" sparse-checkout set skills
-  cp -r "$TMP/skills" "$WORKSPACE/skills"
+# ── 3. GitHub Copilot CLI ───────────────────────────────────────────────────
+# Official install script from https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli
+# Installs the binary to $HOME/.local/bin (default for non-root users).
+echo "  › Installing GitHub Copilot CLI..."
+if ! command -v copilot &>/dev/null; then
+  curl -fsSL https://gh.io/copilot-install | bash
 fi
 
 # ── 4. VS Code MCP config (generated from .mcp.json) ───────────────────────
@@ -51,13 +40,7 @@ EOF
 echo ""
 echo "✅ Setup complete."
 echo ""
-echo "  MCP servers are pre-configured in .mcp.json at the project root."
-echo ""
-echo "  To install plugins, authenticate first:"
-echo "    copilot"
-echo "    /login"
-echo ""
-echo "  Then install plugins from the terminal:"
-echo "    copilot plugin marketplace add github/awesome-copilot  # if not already registered"
-echo "    copilot plugin install anvil@awesome-copilot"
-echo "    copilot plugin install azure@azure-skills"
+echo "  Next steps:"
+echo "    1. Authenticate: copilot  →  /login"
+echo "    2. Optional extras:  bash .devcontainer/scripts/install-skills.sh"
+echo "                         bash .devcontainer/scripts/install-plugins.sh"
