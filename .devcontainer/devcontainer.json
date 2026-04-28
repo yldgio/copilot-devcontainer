@@ -35,5 +35,9 @@
     "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
   },
 
+  "containerEnv": {
+    "WAYLAND_DISPLAY": ""
+  },
+
   "remoteUser": "vscode"
 }
