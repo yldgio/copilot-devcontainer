@@ -38,20 +38,6 @@ if ! command -v copilot &>/dev/null; then
 fi
 echo "  ✓ copilot $(copilot --version 2>/dev/null || echo '(version unavailable)') at $(command -v copilot)"
 
-# ── 4. VS Code MCP config (generated from .mcp.json) ───────────────────────
-# .mcp.json is the single source of truth (Copilot CLI uses "mcpServers").
-# VS Code Copilot Chat reads .vscode/mcp.json with key "servers".
-# The file is generated here and excluded from git (.gitignore).
-echo "  › Generating .vscode/mcp.json from .mcp.json..."
-uv run python3 - <<'EOF'
-import json, pathlib
-
-src = json.loads(pathlib.Path(".mcp.json").read_text())
-dst = {"servers": src["mcpServers"]}
-vscode_dir = pathlib.Path(".vscode")
-vscode_dir.mkdir(exist_ok=True)
-(vscode_dir / "mcp.json").write_text(json.dumps(dst, indent=2) + "\n")
-EOF
 
 echo ""
 echo "✅ Setup complete."
