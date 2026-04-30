@@ -2,6 +2,8 @@
 
 Dev container for AI-assisted development with GitHub Copilot CLI.
 
+**Installation:** To install and configure this environment, follow the instructions in [AUTO-INSTALL.md](./AUTO-INSTALL.md).
+
 ## Environment
 
 - Ubuntu 24.04 | Node LTS | Python 3.12 (via UV) | Git | GitHub CLI (`gh`)
