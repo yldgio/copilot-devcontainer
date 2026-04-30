@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1](https://github.com/yldgio/copilot-devcontainer/compare/v1.0.0...v1.0.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* update setup script to use 'uv run' for Python execution ([b8ce045](https://github.com/yldgio/copilot-devcontainer/commit/b8ce045600751421ffbd6cb06c14e47db82e27b5))
+
 ## 1.0.0 (2026-04-20)
 
 
