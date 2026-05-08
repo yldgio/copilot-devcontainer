@@ -26,18 +26,32 @@
     }
   },
 
-  // Persists Copilot CLI auth across container rebuilds.
-  // To opt-out: remove this mounts section or run .devcontainer/scripts/clear-auth.sh
+  // Persists auth tokens across container rebuilds via named Docker volumes.
+  // To clear auth: run .devcontainer/scripts/clear-auth.sh
+  // To opt-out entirely: remove this mounts section and rebuild.
   "mounts": [
     {
+      // Copilot CLI session tokens
       "source": "copilot-auth",
       "target": "/home/vscode/.config/copilot",
+      "type": "volume"
+    },
+    {
+      // gh CLI token (hosts.yml) — persists `gh auth login` across rebuilds
+      "source": "gh-auth",
+      "target": "/home/vscode/.config/gh",
+      "type": "volume"
+    },
+    {
+      // gnome-keyring data — tokens stored by libsecret survive rebuilds
+      "source": "copilot-keyring",
+      "target": "/home/vscode/.local/share/keyrings",
       "type": "volume"
     }
   ],
 
   // Runs once after the container is created.
-  // Installs UV, GitHub Copilot CLI, and generates .vscode/mcp.json from .mcp.json.
+  // Installs UV and GitHub Copilot CLI.
   // MCP servers are pre-configured in .mcp.json. Plugins are installed post-login via the CLI.
   "postCreateCommand": "bash .devcontainer/setup.sh",
 

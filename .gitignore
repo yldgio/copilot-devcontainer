@@ -17,7 +17,7 @@ Thumbs.db
 # VS Code / editor
 PowerShellEditorServices.json
 
-# Generated inside the dev container from .mcp.json
+# Ignored in case .vscode/mcp.json is created locally; not generated automatically.
 .vscode/mcp.json
 # Copilot local env (secrets — never commit)
 .devcontainer/.env.local

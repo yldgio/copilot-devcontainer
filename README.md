@@ -9,8 +9,8 @@ A reusable dev container for AI-assisted development with GitHub Copilot CLI, pr
 | Feature | Version |
 |---------|---------|
 | Ubuntu | 24.04 |
-| Git | 1.x |
-| GitHub CLI (`gh`) | 1.x |
+| Git | latest (2.x) |
+| GitHub CLI (`gh`) | latest (2.x) |
 | Node.js | LTS |
 | Docker CLI | docker-outside-of-docker |
 
@@ -18,25 +18,21 @@ A reusable dev container for AI-assisted development with GitHub Copilot CLI, pr
 
 | Tool | How |
 |------|-----|
-| **UV** | `curl https://astral.sh/uv/install.sh` → `~/.local/bin/uv` |
+| **UV** | `curl -LsSf https://astral.sh/uv/install.sh \| sh` → `~/.local/bin/uv` |
 | **Python 3.12** | `uv python install 3.12` (managed by UV) |
-| **GitHub Copilot CLI** | official installer `curl -fsSL https://gh.io/copilot-install \| bash` → `~/.local/bin/copilot` |
+| **GitHub Copilot CLI** | official installer `PREFIX="$HOME/.local" curl -fsSL https://gh.io/copilot-install \| bash` → `~/.local/bin/copilot` |
 
 ### VS Code extensions
 
-- `github.copilot` + `github.copilot-chat` — AI completions and chat
 - `ms-python.python` + `ms-python.vscode-pylance` — Python support
 - `ms-azuretools.vscode-docker` — Docker management UI
-- `eamodio.gitlens` — enhanced Git history
+- `mhutchie.git-graph` — enhanced Git Graph view
 
 ### MCP servers
-
-`.mcp.json` is the single source of truth. `setup.sh` auto-generates `.vscode/mcp.json` (different root key required by VS Code) at container creation. The generated file is excluded from git.
 
 | File | Used by | Key |
 |------|---------|-----|
 | `.mcp.json` | GitHub Copilot CLI | `mcpServers` |
-| `.vscode/mcp.json` *(generated)* | VS Code Copilot Chat | `servers` |
 
 | Server | Transport | Purpose |
 |--------|-----------|---------|
@@ -118,6 +114,12 @@ Or via environment variable:
 $env:DEVCONTAINER_VERSION = "v1.0.0"; irm https://raw.githubusercontent.com/yldgio/copilot-devcontainer/main/install.ps1 | iex
 ```
 
+Force overwrite:
+
+```powershell
+$env:DEVCONTAINER_FORCE = "1"; irm https://raw.githubusercontent.com/yldgio/copilot-devcontainer/main/install.ps1 | iex
+```
+
 ### What gets installed
 
 | Path | Description |
@@ -126,6 +128,8 @@ $env:DEVCONTAINER_VERSION = "v1.0.0"; irm https://raw.githubusercontent.com/yldg
 | `.devcontainer/setup.sh` | Post-create setup script |
 | `.devcontainer/scripts/setup-copilot.sh` | Interactive Copilot setup wizard |
 | `.devcontainer/scripts/install-plugins.sh` | Optional: install Copilot CLI plugins |
+| `.devcontainer/scripts/clear-auth.sh` | Clear persisted auth (Copilot CLI, gh CLI, keyring) from named volumes |
+| `.devcontainer/.env.local.example` | Reference template for BYOK and offline configuration |
 | `.mcp.json` | MCP server configuration |
 
 The installer aborts if `.devcontainer/` already exists. Use `--force` / `-Force` to overwrite.
@@ -172,6 +176,13 @@ On a new container, the wizard finishes by reminding you to complete Copilot aut
 copilot
 /login
 ```
+
+> Auth data is persisted in named Docker volumes and survives container rebuilds:
+> - **Copilot CLI** session → `copilot-auth` volume (`~/.config/copilot/`)
+> - **gh CLI** token → `gh-auth` volume (`~/.config/gh/`)
+> - **gnome-keyring** secrets → `copilot-keyring` volume (`~/.local/share/keyrings/`)
+>
+> To clear all auth: `bash .devcontainer/scripts/clear-auth.sh`
 
 ### 4. (Optional) legacy plugin-only script
 

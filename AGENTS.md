@@ -13,12 +13,19 @@ Dev container for AI-assisted development with GitHub Copilot CLI.
 
 ## Authentication Persistence
 
-Copilot CLI auth is stored in a named Docker volume (`copilot-auth`) — login survives container rebuilds.
+Auth tokens are stored in named Docker volumes and survive container rebuilds.
+
+| Token | Volume | Path |
+|-------|--------|------|
+| Copilot CLI session | `copilot-auth` | `~/.config/copilot/` |
+| gh CLI token | `gh-auth` | `~/.config/gh/` |
+| gnome-keyring secrets | `copilot-keyring` | `~/.local/share/keyrings/` |
 
 | Action | Command |
-|--------|---------|
-| First login | `copilot` → `/login` |
-| Clear / opt-out | `bash .devcontainer/scripts/clear-auth.sh` |
+|--------|--------|
+| First login (Copilot) | `copilot` → `/login` |
+| First login (gh CLI) | `gh auth login` |
+| Clear all auth | `bash .devcontainer/scripts/clear-auth.sh` |
 | Permanent opt-out | Remove `"mounts"` block from `devcontainer.json`, rebuild |
 
 ## Workspace
@@ -32,7 +39,7 @@ Host project folder is bind-mounted at `/workspaces/copilot-devcontainer`. Files
 | `context7` | HTTP | Library docs |
 | `microsoft-docs` | HTTP | Microsoft Learn |
 
-Config: `.mcp.json` (CLI) and `.vscode/mcp.json` (VS Code Copilot Chat).
+Config: `.mcp.json` (read by both Copilot CLI and VS Code Copilot Chat).
 
 ## Advanced Configuration
 

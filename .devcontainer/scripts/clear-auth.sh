@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-# clear-auth.sh — Remove persisted Copilot CLI auth from the named Docker volume.
+# clear-auth.sh — Remove persisted auth from all named Docker volumes.
+#
+# Clears:
+#   - Copilot CLI session  (~/.config/copilot/    → copilot-auth volume)
+#   - gh CLI token         (~/.config/gh/          → gh-auth volume)
+#   - gnome-keyring data   (~/.local/share/keyrings/ → copilot-keyring volume)
 #
 # Use this when you want to:
-#   - Log out and revoke the stored session
-#   - Opt-out of persistent auth for this container
+#   - Log out and revoke stored sessions
 #   - Reset auth for security reasons (e.g. token rotation, shared machine)
+#   - Opt-out of persistent auth for this container
 #
 # Run inside the container:
 #   bash .devcontainer/scripts/clear-auth.sh
@@ -13,15 +18,24 @@
 #   Remove the "mounts" block from .devcontainer/devcontainer.json and rebuild.
 set -euo pipefail
 
-AUTH_DIR="$HOME/.config/copilot"
+COPILOT_DIR="$HOME/.config/copilot"
+GH_DIR="$HOME/.config/gh"
+KEYRING_DIR="$HOME/.local/share/keyrings"
 
-if [[ ! -d "$AUTH_DIR" ]]; then
-  echo "ℹ️  No Copilot auth directory found at $AUTH_DIR — nothing to clear."
+any_found=false
+for dir in "$COPILOT_DIR" "$GH_DIR" "$KEYRING_DIR"; do
+  [[ -d "$dir" ]] && any_found=true && break
+done
+
+if [[ "$any_found" == "false" ]]; then
+  echo "ℹ️  No auth data found — nothing to clear."
   exit 0
 fi
 
-echo "⚠️  This will remove all Copilot CLI auth data from the persistent volume."
-echo "    You will need to re-authenticate with: copilot → /login"
+echo "⚠️  This will remove all persisted auth data:"
+echo "    - Copilot CLI session : $COPILOT_DIR"
+echo "    - gh CLI token        : $GH_DIR"
+echo "    - gnome-keyring data  : $KEYRING_DIR"
 echo ""
 read -rp "    Continue? [y/N] " confirm
 if [[ "${confirm,,}" != "y" ]]; then
@@ -29,10 +43,18 @@ if [[ "${confirm,,}" != "y" ]]; then
   exit 0
 fi
 
-find "${AUTH_DIR:?}" -mindepth 1 -delete
+for dir in "$COPILOT_DIR" "$GH_DIR" "$KEYRING_DIR"; do
+  if [[ -d "$dir" ]]; then
+    find "${dir:?}" -mindepth 1 -delete
+    echo "  ✓ Cleared $dir"
+  fi
+done
+
 echo ""
-echo "✅ Auth cleared. The persistent volume is now empty."
+echo "✅ Auth cleared. All persistent volumes are now empty."
 echo "   To permanently disable auth persistence, remove the 'mounts' block"
 echo "   from .devcontainer/devcontainer.json and rebuild the container."
 echo ""
-echo "   To re-authenticate:  copilot  →  /login"
+echo "   To re-authenticate:"
+echo "     Copilot CLI : copilot  →  /login"
+echo "     gh CLI      : gh auth login"
