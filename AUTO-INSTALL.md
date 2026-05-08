@@ -286,4 +286,102 @@ curl -fsSL https://mcp.context7.com/mcp --max-time 5 -o /dev/null -w "%{http_cod
 
 ---
 
+---
+
+## §9 Persistent Auth & Advanced Configuration
+
+### 9.1 Persistent Authentication
+
+Copilot CLI auth data (`~/.config/copilot/`) is stored in a named Docker volume (`copilot-auth`) so you only need to log in once. Auth survives container rebuilds and image updates.
+
+**How it works:** `devcontainer.json` declares a named volume mount:
+
+```json
+"mounts": [
+  { "source": "copilot-auth", "target": "/home/vscode/.config/copilot", "type": "volume" }
+]
+```
+
+**Opt-out (temporary) — clear stored auth:**
+
+```bash
+bash .devcontainer/scripts/clear-auth.sh
+```
+
+**Opt-out (permanent) — disable auth persistence:**
+
+Remove the `"mounts"` block from `.devcontainer/devcontainer.json` and rebuild the container. Auth will be ephemeral (lost on rebuild).
+
+**Re-authenticate:**
+
+```
+copilot → /login
+```
+
+### 9.2 BYOK — Bring Your Own Key
+
+Use your own Azure OpenAI, OpenAI-compatible, or local model instead of GitHub's hosted Copilot model.
+
+`devcontainer.json` uses `${localEnv:VAR_NAME}` to read variables from your **host** environment (the shell where VS Code runs). You must export the variables before opening VS Code — they are not loaded from a file automatically.
+
+**Option A — per-session (export before opening VS Code):**
+
+```bash
+export COPILOT_BYOK_API_KEY=sk-...
+export COPILOT_BYOK_ENDPOINT=https://<your-resource>.openai.azure.com/
+code .
+```
+
+**Option B — permanent (add to your shell profile):**
+
+Add to `~/.bashrc`, `~/.zshrc`, or your PowerShell `$PROFILE`:
+
+```bash
+export COPILOT_BYOK_API_KEY=sk-...
+export COPILOT_BYOK_ENDPOINT=https://<your-resource>.openai.azure.com/
+```
+
+Then restart VS Code and rebuild the container.
+
+**Option C — direnv (auto-export on directory entry):**
+
+```bash
+cp .devcontainer/.env.local.example .devcontainer/.env.local
+# edit .env.local, fill in your values (using `export VAR=value` syntax)
+# install direnv and run: direnv allow
+```
+
+`.devcontainer/.env.local.example` lists all supported variables. `.devcontainer/.env.local` is gitignored — your keys are never committed.
+
+After rebuilding, run post-login setup:
+
+```bash
+bash .devcontainer/scripts/setup-copilot.sh
+```
+
+### 9.3 Offline / Air-Gapped Mode
+
+To prevent Copilot from making network requests (useful for network-isolated or regulated environments), export `COPILOT_OFFLINE=true` in your host environment before opening VS Code:
+
+```bash
+export COPILOT_OFFLINE=true
+code .
+```
+
+Or add it permanently to your shell profile. Then rebuild the container.
+
+The `COPILOT_OFFLINE` variable is injected into the container via `containerEnv` (using `${localEnv:COPILOT_OFFLINE}`). The setup script reports its status at startup.
+
+### 9.4 Copilot Setup Script
+
+After first login, run the setup script to install base plugins and apply BYOK/offline config:
+
+```bash
+bash .devcontainer/scripts/setup-copilot.sh
+```
+
+This replaces the older `install-plugins.sh` (kept for backwards compatibility).
+
+---
+
 > The installation workflow above is also available as an agent skill at `.agents/skills/install-devcontainer/SKILL.md`.

@@ -19,4 +19,5 @@ PowerShellEditorServices.json
 
 # Generated inside the dev container from .mcp.json
 .vscode/mcp.json
-error.txt
+# Copilot local env (secrets — never commit)
+.devcontainer/.env.local

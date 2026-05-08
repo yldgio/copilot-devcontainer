@@ -26,6 +26,16 @@
     }
   },
 
+  // Persists Copilot CLI auth across container rebuilds.
+  // To opt-out: remove this mounts section or run .devcontainer/scripts/clear-auth.sh
+  "mounts": [
+    {
+      "source": "copilot-auth",
+      "target": "/home/vscode/.config/copilot",
+      "type": "volume"
+    }
+  ],
+
   // Runs once after the container is created.
   // Installs UV, GitHub Copilot CLI, and generates .vscode/mcp.json from .mcp.json.
   // MCP servers are pre-configured in .mcp.json. Plugins are installed post-login via the CLI.
@@ -36,7 +46,14 @@
   },
 
   "containerEnv": {
-    "WAYLAND_DISPLAY": ""
+    "WAYLAND_DISPLAY": "",
+    // Offline mode: set COPILOT_OFFLINE=true in your host env or .env.local to enable network isolation.
+    "COPILOT_OFFLINE": "${localEnv:COPILOT_OFFLINE}",
+    // BYOK (Bring Your Own Key): set these in your host env or .env.local.
+    // COPILOT_BYOK_ENDPOINT: your Azure OpenAI / compatible endpoint URL
+    // COPILOT_BYOK_API_KEY:  your model API key (never commit this)
+    "COPILOT_BYOK_ENDPOINT": "${localEnv:COPILOT_BYOK_ENDPOINT}",
+    "COPILOT_BYOK_API_KEY": "${localEnv:COPILOT_BYOK_API_KEY}"
   },
 
   "remoteUser": "vscode"
