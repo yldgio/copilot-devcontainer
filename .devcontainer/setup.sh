@@ -21,6 +21,12 @@ sudo chown -R "$(id -u):$(id -g)" \
   "$HOME/.config/gh" \
   2>/dev/null || true
 
+# ── 0b. Fix shell script permissions ────────────────────────────────────────
+# Ensure all .sh files in the workspace are executable and owned by vscode.
+# Git on Windows strips execute bits; this restores them inside the container.
+find "$WORKSPACE" -name "*.sh" -exec sudo chown vscode:vscode {} + 2>/dev/null || true
+find "$WORKSPACE" -name "*.sh" -exec chmod +x {} +
+
 # ── 1. PATH ─────────────────────────────────────────────────────────────────
 mkdir -p "$INSTALL_BIN"
 export PATH="$INSTALL_BIN:$PATH"
