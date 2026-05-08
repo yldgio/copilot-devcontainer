@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/yldgio/copilot-devcontainer/compare/v1.0.1...v1.1.0) (2026-04-30)
+
+
+### Features
+
+* add installation guide and devcontainer skill documentation ([56a60f0](https://github.com/yldgio/copilot-devcontainer/commit/56a60f0e2c0936b18c40f7912d1555d837180bb3))
+
 ## [1.0.1](https://github.com/yldgio/copilot-devcontainer/compare/v1.0.0...v1.0.1) (2026-04-28)
 
 
