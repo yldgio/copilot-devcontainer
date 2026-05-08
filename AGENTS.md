@@ -39,4 +39,4 @@ Config: `.mcp.json` (CLI) and `.vscode/mcp.json` (VS Code Copilot Chat).
 See `AUTO-INSTALL.md §9` for:
 - **BYOK** (Bring Your Own Key): export `COPILOT_BYOK_API_KEY` and `COPILOT_BYOK_ENDPOINT` in your host shell before opening VS Code (see `.devcontainer/.env.local.example` for the full variable reference)
 - **Offline mode**: export `COPILOT_OFFLINE=true` in your host shell before opening VS Code
-- **Post-login setup**: `bash .devcontainer/scripts/setup-copilot.sh`
+- **Setup wizard**: `bash .devcontainer/scripts/setup-copilot.sh` (new container setup or existing container reconfiguration)

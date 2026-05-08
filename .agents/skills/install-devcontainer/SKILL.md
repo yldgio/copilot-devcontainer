@@ -10,7 +10,7 @@ description: >
 
 # install-devcontainer
 
-This skill installs the `yldgio/copilot-devcontainer` template into a target project and walks through all post-install configuration steps, including Copilot CLI authentication and optional plugin setup.
+This skill installs the `yldgio/copilot-devcontainer` template into a target project and walks through all post-install configuration steps, including the interactive Copilot setup wizard, authentication, and optional legacy plugin-only setup.
 
 ---
 
@@ -87,7 +87,25 @@ Expected final line from `setup.sh`:
 
 ---
 
-## Step 4 — Authenticate Copilot CLI
+## Step 4 — Run the Copilot Setup Wizard
+
+Inside the container terminal:
+
+```bash
+bash .devcontainer/scripts/setup-copilot.sh
+```
+
+Explain to the user that the wizard supports:
+
+- new container first-run customization
+- existing container reconfiguration
+- opt-in plugin management, BYOK, and offline mode
+
+If plugin actions are deferred, the wizard will tell the user to complete login and rerun it.
+
+---
+
+## Step 5 — Authenticate Copilot CLI
 
 Inside the container terminal:
 
@@ -111,9 +129,9 @@ copilot --version
 
 ---
 
-## Step 5 — Install Plugins (optional)
+## Step 6 — Install Plugins (optional, legacy path)
 
-Requires authentication from Step 4.
+Requires authentication from Step 5.
 
 ```bash
 bash .devcontainer/scripts/install-plugins.sh
@@ -125,7 +143,7 @@ Verify inside the TUI: type `/plugins`.
 
 ---
 
-## Step 6 — Verify the Full Setup
+## Step 7 — Verify the Full Setup
 
 Run inside the container:
 

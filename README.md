@@ -124,6 +124,7 @@ $env:DEVCONTAINER_VERSION = "v1.0.0"; irm https://raw.githubusercontent.com/yldg
 |------|-------------|
 | `.devcontainer/devcontainer.json` | Container definition |
 | `.devcontainer/setup.sh` | Post-create setup script |
+| `.devcontainer/scripts/setup-copilot.sh` | Interactive Copilot setup wizard |
 | `.devcontainer/scripts/install-plugins.sh` | Optional: install Copilot CLI plugins |
 | `.mcp.json` | MCP server configuration |
 
@@ -147,14 +148,7 @@ The installer aborts if `.devcontainer/` already exists. Use `--force` / `-Force
 
 Open the project in VS Code and choose **Dev Containers: Reopen in Container**. The `postCreateCommand` runs `setup.sh` automatically on first creation.
 
-### 2. Authenticate Copilot CLI
-
-```bash
-copilot
-/login
-```
-
-### 3. Run the setup wizard (recommended)
+### 2. Run the setup wizard (recommended)
 
 ```bash
 bash .devcontainer/scripts/setup-copilot.sh
@@ -163,12 +157,21 @@ bash .devcontainer/scripts/setup-copilot.sh
 The wizard is intentionally simple and guides you through opt-in steps:
 
 1. Plugin management
-	- new container: add recommended/extra plugins
-	- existing container: add/remove plugins
+   - new container: add recommended/extra plugins
+   - existing container: add/remove plugins
 2. BYOK setup or adjustment
 3. Offline mode setup or adjustment
 
 Each step can be skipped independently.
+
+On a new container, the wizard finishes by reminding you to complete Copilot authentication.
+
+### 3. Complete Copilot authentication
+
+```bash
+copilot
+/login
+```
 
 ### 4. (Optional) legacy plugin-only script
 

@@ -129,6 +129,7 @@ $env:DEVCONTAINER_FORCE = "1"; irm https://raw.githubusercontent.com/yldgio/copi
 |---|---|
 | `.devcontainer/devcontainer.json` | Container definition (Ubuntu 24.04, features, extensions) |
 | `.devcontainer/setup.sh` | Post-create script: installs UV, Python 3.12, Copilot CLI |
+| `.devcontainer/scripts/setup-copilot.sh` | Interactive Copilot setup wizard |
 | `.devcontainer/scripts/install-plugins.sh` | Optional: installs Copilot CLI marketplace plugins |
 | `.mcp.json` | MCP server config for Copilot CLI and VS Code Copilot Chat |
 
@@ -170,6 +171,14 @@ Expected final output:
 ---
 
 ## §5 Authenticate GitHub Copilot CLI
+
+On a **new container**, the recommended flow is:
+
+1. run `bash .devcontainer/scripts/setup-copilot.sh`
+2. finish configuration choices
+3. run `copilot` → `/login` when the wizard reminds you
+
+Authentication is still required before plugin operations can succeed. If you authenticate first, that also works.
 
 Authentication requires a human to complete a browser OAuth flow. The agent should instruct the user rather than attempting to automate it.
 
@@ -225,7 +234,7 @@ Every step is opt-in and can be skipped.
 - If not authenticated, plugin operations are deferred with guidance:
   - run `copilot`
   - run `/login`
-  - rerun `setup-copilot.sh`
+   - rerun `bash .devcontainer/scripts/setup-copilot.sh --existing`
 
 ### 6.2 Legacy plugin-only script
 
@@ -381,6 +390,8 @@ bash .devcontainer/scripts/setup-copilot.sh
 ```
 
 It can be used both for first-run setup and for reconfiguration in existing containers.
+
+On a new container, the wizard is intended to run before `copilot` → `/login`; its completion message tells the user when to finish authentication.
 
 For automation, run in non-interactive mode:
 
