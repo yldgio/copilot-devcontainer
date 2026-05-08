@@ -17,7 +17,8 @@ echo "from the command line, type: copilot plugin marketplace browse MARKETPLACE
 echo "to install a plugin from the marketplace, from the copilot TUI run: copilot → /plugins install PLUGIN-NAME"
 echo "example: '/plugin install azure@azure-skills' or '/plugin install workiq@work-iq'"
 
-
 echo ""
 echo "✅ Plugins installed."
 echo "   Run 'copilot' and '/plugins' to verify."
+
+

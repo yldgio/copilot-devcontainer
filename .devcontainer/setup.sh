@@ -11,12 +11,13 @@ echo "━━━ Copilot Dev Container Setup ━━━━━━━━━━━━
 # Docker creates named-volume mount-point directories as root before this
 # script runs, even when remoteUser is set. Reclaim ownership for every
 # directory used as a volume target so the vscode user can read/write them.
-#   copilot-auth    → ~/.config/copilot   (Copilot CLI tokens)
-#   gh-auth         → ~/.config/gh        (gh CLI hosts.yml)
-#   copilot-keyring → ~/.local/share/keyrings  (gnome-keyring data)
+#   copilot-auth    → ~/.copilot              (Copilot CLI data dir: tokens, settings)
+#   gh-auth         → ~/.config/gh            (gh CLI hosts.yml)
+#   copilot-keyring → ~/.local/share/keyrings (gnome-keyring data)
+mkdir -p "$HOME/.copilot" "$HOME/.config/gh"
 sudo chown -R "$(id -u):$(id -g)" \
   "$HOME/.local" \
-  "$HOME/.config/copilot" \
+  "$HOME/.copilot" \
   "$HOME/.config/gh" \
   2>/dev/null || true
 
@@ -36,30 +37,41 @@ echo "  › Installing Python 3.12 via UV..."
 uv python install 3.12
 
 # ── 3. Keyring support ─────────────────────────────────────────────────────
-# gh CLI and Copilot CLI look for a system keyring (libsecret) to store tokens.
-# Without it they print: "The system vault ... is not available."
-# gnome-keyring-daemon runs headless via D-Bus and satisfies the libsecret interface.
+# gh CLI and Copilot CLI use libsecret to store tokens in a system keyring.
+# gnome-keyring-daemon satisfies the libsecret D-Bus interface headlessly.
 # Keyring data lands in ~/.local/share/keyrings/ which is mounted as a named
 # volume (copilot-keyring) so it survives container rebuilds.
+#
+# gnome-keyring 46 cannot CREATE a new login collection headlessly — that
+# requires gcr-prompter (a GTK3 GUI dialog). We work around this by
+# pre-populating the collection descriptor file on first run. The file uses
+# the text format gnome-keyring 46 writes for empty-password keyrings; the
+# daemon loads it at startup and auto-unlocks it (empty password = no prompt).
 echo "  › Installing keyring support (gnome-keyring, dbus-x11)..."
 sudo apt-get update -qq
 sudo apt-get install -y --no-install-recommends gnome-keyring dbus-x11 > /dev/null 2>&1
 
-# One-time keyring initialisation: create the default (login) keyring with an
-# empty password so gnome-keyring can store secrets headlessly without a GUI
-# prompt. The keyring file lands in ~/.local/share/keyrings/ which is mounted
-# as the copilot-keyring named volume and survives container rebuilds.
-echo "  › Initializing default keyring..."
-if command -v dbus-launch &>/dev/null; then
-  (
-    eval "$(dbus-launch --sh-syntax 2>/dev/null)" 2>/dev/null || exit 0
-    eval "$(gnome-keyring-daemon --start --components=secrets 2>/dev/null)" 2>/dev/null || true
-    # --unlock creates the login keyring file with an empty password on first run.
-    echo -n "" | gnome-keyring-daemon --unlock >/dev/null 2>&1 || true
-    sleep 1
-    kill "${DBUS_SESSION_BUS_PID:-}" 2>/dev/null || true
-  ) 2>/dev/null || true
+# Pre-create the login keyring collection if the volume is empty (first build).
+# gnome-keyring reads this file and exposes the collection via D-Bus with no
+# password prompt. Secrets are encrypted on disk by the daemon once items are
+# stored. Guard with -f so a rebuild never overwrites existing keyring data.
+KEYRING_DIR="$HOME/.local/share/keyrings"
+mkdir -p "$KEYRING_DIR"
+if [ ! -f "$KEYRING_DIR/login.keyring" ]; then
+  cat > "$KEYRING_DIR/login.keyring" << 'KEYRINGEOF'
+[keyring]
+display-name=login
+ctime=0
+mtime=0
+lock-on-idle=false
+lock-after=false
+KEYRINGEOF
+  chmod 600 "$KEYRING_DIR/login.keyring"
+  # "default" aliases the default collection name — must match display-name above
+  echo "login" > "$KEYRING_DIR/default"
+  echo "  ✓ Login keyring pre-initialized (empty-password, auto-unlocks headlessly)"
 fi
+unset KEYRING_DIR
 
 # Start gnome-keyring-daemon for each interactive bash session.
 if ! grep -qF "gnome-keyring-daemon" "$HOME/.bashrc" 2>/dev/null; then
@@ -99,10 +111,7 @@ if command -v gnome-keyring-daemon &>/dev/null && \
    ! dbus-send --session --dest=org.freedesktop.DBus --type=method_call \
        --print-reply /org/freedesktop/DBus org.freedesktop.DBus.ListNames \
        2>/dev/null | grep -q "org.freedesktop.secrets"; then
-  # --start and --unlock are incompatible in gnome-keyring 46+; run separately.
   eval "$(gnome-keyring-daemon --start --components=secrets 2>/dev/null)" 2>/dev/null || true
-  # Unlock (or create) the default keyring with an empty password.
-  echo -n "" | gnome-keyring-daemon --unlock >/dev/null 2>&1 || true
 fi
 
 unset _DBUS_ENV

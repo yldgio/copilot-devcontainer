@@ -31,9 +31,11 @@
   // To opt-out entirely: remove this mounts section and rebuild.
   "mounts": [
     {
-      // Copilot CLI session tokens
+      // Copilot CLI data dir (~/.copilot): loggedInUsers, settings, session state.
+      // The OAuth token itself is stored in the keyring (copilot-keyring below),
+      // not here. NOTE: copilot CLI uses ~/.copilot (not ~/.config/copilot).
       "source": "copilot-auth",
-      "target": "/home/vscode/.config/copilot",
+      "target": "/home/vscode/.copilot",
       "type": "volume"
     },
     {

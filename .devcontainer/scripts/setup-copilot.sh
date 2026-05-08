@@ -14,7 +14,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEVCONTAINER_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 ENV_LOCAL="$DEVCONTAINER_DIR/.env.local"
-COPILOT_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/copilot"
+COPILOT_CONFIG_DIR="$HOME/.copilot"
 BYOK_CONFIG="$COPILOT_CONFIG_DIR/byok.env"
 
 DEFAULT_MARKETPLACES=(
