@@ -163,8 +163,8 @@ Expected final output:
 ✅ Setup complete.
 
   Next steps:
-    1. Authenticate: copilot  →  /login
-    2. Optional: bash .devcontainer/scripts/install-plugins.sh  (requires login first)
+   1. Run wizard: bash .devcontainer/scripts/setup-copilot.sh
+   2. Complete auth: copilot  →  /login
 ```
 
 ---
@@ -197,42 +197,42 @@ A version string confirms the binary is working. To confirm authentication speci
 
 ---
 
-## §6 Optional: Install Copilot CLI Plugins
+## §6 Configure Copilot with the Setup Wizard
 
-Must be done after authentication (§5). Run inside the container:
+Run inside the container:
+
+```bash
+bash .devcontainer/scripts/setup-copilot.sh
+```
+
+The wizard supports two flows:
+
+1. **New container**
+   - optional plugin additions
+   - optional BYOK configuration
+   - optional offline mode
+   - completion reminder to run `copilot` then `/login`
+2. **Existing container**
+   - add/remove plugins
+   - adjust BYOK configuration
+   - adjust offline mode
+
+Every step is opt-in and can be skipped.
+
+### 6.1 Plugin management behavior
+
+- If authenticated, plugin operations run immediately.
+- If not authenticated, plugin operations are deferred with guidance:
+  - run `copilot`
+  - run `/login`
+  - rerun `setup-copilot.sh`
+
+### 6.2 Legacy plugin-only script
+
+For backwards compatibility, plugin-only setup is still available:
 
 ```bash
 bash .devcontainer/scripts/install-plugins.sh
-```
-
-Installs three marketplace plugins:
-
-| Plugin | Purpose |
-|---|---|
-| `microsoft/azure-skills` | Azure CLI and resource management |
-| `github/awesome-copilot` | Community-curated skills |
-| `microsoft/work-iq` | Productivity workflows |
-
-To verify plugins are installed, open the Copilot TUI and type `/plugins`.
-
-To browse a marketplace from the command line:
-
-```bash
-copilot plugin marketplace browse MARKETPLACE-NAME
-```
-
-To install a specific plugin from the TUI:
-
-```
-/plugin install azure@azure-skills
-/plugin install workiq@work-iq
-```
-
-Expected final output from the script:
-
-```
-✅ Plugins installed.
-   Run 'copilot' and '/plugins' to verify.
 ```
 
 ---
@@ -374,13 +374,21 @@ The `COPILOT_OFFLINE` variable is injected into the container via `containerEnv`
 
 ### 9.4 Copilot Setup Script
 
-After first login, run the setup script to install base plugins and apply BYOK/offline config:
+Run the setup script to launch the interactive setup wizard:
 
 ```bash
 bash .devcontainer/scripts/setup-copilot.sh
 ```
 
-This replaces the older `install-plugins.sh` (kept for backwards compatibility).
+It can be used both for first-run setup and for reconfiguration in existing containers.
+
+For automation, run in non-interactive mode:
+
+```bash
+bash .devcontainer/scripts/setup-copilot.sh --non-interactive
+```
+
+The older `install-plugins.sh` is kept for backwards compatibility.
 
 ---
 

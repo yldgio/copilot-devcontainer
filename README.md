@@ -154,12 +154,30 @@ copilot
 /login
 ```
 
-### 3. (Optional) install plugins
+### 3. Run the setup wizard (recommended)
 
 ```bash
-bash .devcontainer/scripts/install-plugins.sh  # Copilot CLI plugins (requires login first)
+bash .devcontainer/scripts/setup-copilot.sh
 ```
 
-### 4. Use MCP servers
+The wizard is intentionally simple and guides you through opt-in steps:
+
+1. Plugin management
+	- new container: add recommended/extra plugins
+	- existing container: add/remove plugins
+2. BYOK setup or adjustment
+3. Offline mode setup or adjustment
+
+Each step can be skipped independently.
+
+### 4. (Optional) legacy plugin-only script
+
+```bash
+bash .devcontainer/scripts/install-plugins.sh
+```
+
+> The legacy script is kept for backwards compatibility. Prefer `setup-copilot.sh`.
+
+### 5. Use MCP servers
 
 MCP servers are available immediately in both the Copilot CLI and VS Code Copilot Chat.

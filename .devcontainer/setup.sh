@@ -38,13 +38,13 @@ if ! command -v copilot &>/dev/null; then
 fi
 echo "  ✓ copilot $(copilot --version 2>/dev/null || echo '(version unavailable)') at $(command -v copilot)"
 
-
 echo ""
 echo "✅ Setup complete."
 echo ""
 echo "  Next steps:"
-echo "    1. Authenticate  : copilot  →  /login"
-echo "    2. Setup plugins : bash .devcontainer/scripts/setup-copilot.sh  (run after login)"
+echo "    1. Run wizard    : bash .devcontainer/scripts/setup-copilot.sh"
+echo "       (guides plugins, BYOK, and offline mode — all opt-in)"
+echo "    2. Complete auth : copilot  →  /login"
 echo ""
 echo "  Advanced:"
 echo "    BYOK / offline   : copy .devcontainer/.env.local.example → .env.local, set vars, rebuild"
