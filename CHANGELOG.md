@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/yldgio/copilot-devcontainer/compare/v1.1.0...v1.2.0) (2026-05-08)
+
+
+### Features
+
+* add persistent authentication and advanced configuration for Copilot CLI ([c1bafe9](https://github.com/yldgio/copilot-devcontainer/commit/c1bafe973bb0f18b902fd25d0ccfd174e6883203))
+* **devcontainer:** add interactive copilot setup wizard with opt-in flows) ([1c10325](https://github.com/yldgio/copilot-devcontainer/commit/1c103257a33dc9febbfaaa023606fab8db0c3ea0))
+* **docs:** update installation and setup instructions for interactive Copilot setup wizard ([dcda9a9](https://github.com/yldgio/copilot-devcontainer/commit/dcda9a9a5d8896d45a7bc1dc9c4f9fbb11440b4c))
+* enhance authentication persistence and clear auth script ([d89f0c3](https://github.com/yldgio/copilot-devcontainer/commit/d89f0c3550c07cd6cbeb2a776595d017cdf75c1b))
+* fix shell script permissions for workspace files ([7ff53d4](https://github.com/yldgio/copilot-devcontainer/commit/7ff53d4f4bdc44813a087b9976b3bf8eec6f8146))
+* update Copilot CLI data directory and clear-auth script ([3675380](https://github.com/yldgio/copilot-devcontainer/commit/367538021ba969c5dbe117436394fb3c9b191dfa))
+
 ## [1.1.0](https://github.com/yldgio/copilot-devcontainer/compare/v1.0.1...v1.1.0) (2026-04-30)
 
 
