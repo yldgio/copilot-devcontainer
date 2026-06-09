@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0](https://github.com/yldgio/copilot-devcontainer/compare/v1.2.0...v1.3.0) (2026-06-09)
+
+
+### Features
+
+* add RTK (LLM Token Optimizer) installation to setup script and documentation ([fe876fd](https://github.com/yldgio/copilot-devcontainer/commit/fe876fd7710edf27fed8145428a4fd9eceee3ca1))
+
 ## [1.2.0](https://github.com/yldgio/copilot-devcontainer/compare/v1.1.0...v1.2.0) (2026-05-08)
 
 
