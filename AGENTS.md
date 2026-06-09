@@ -10,6 +10,7 @@ Dev container for AI-assisted development with GitHub Copilot CLI.
 - Docker CLI via host socket (`docker-outside-of-docker`) — no daemon inside the container
 - UV at `~/.local/bin/uv`
 - GitHub Copilot CLI: `copilot` — authenticate with `/login` on first use
+- RTK (`rtk-ai/rtk`): LLM token optimizer — auto-initialized globally for Copilot at container creation
 
 ## Authentication Persistence
 

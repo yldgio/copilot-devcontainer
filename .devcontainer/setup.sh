@@ -140,6 +140,23 @@ if ! command -v copilot &>/dev/null; then
 fi
 echo "  ✓ copilot $(copilot --version 2>/dev/null || echo '(version unavailable)') at $(command -v copilot)"
 
+# ── 5. RTK (LLM Token Optimizer) ────────────────────────────────────────────
+# RTK (rtk-ai/rtk) reduces LLM token usage by intercepting and transparently
+# rewriting tool calls. Initialized globally with --copilot so it activates
+# automatically across all Copilot CLI sessions.
+echo "  › Installing RTK (token optimizer for AI assistants)..."
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+
+if ! command -v rtk &>/dev/null; then
+  echo "⚠️  rtk not found in PATH after install. Binary should be at $INSTALL_BIN/rtk"
+  ls -la "$INSTALL_BIN/rtk" 2>/dev/null || echo "   Binary missing — install may have failed."
+else
+  echo "  ✓ rtk at $(command -v rtk)"
+  echo "  › Initializing RTK globally for Copilot..."
+  rtk init -g --copilot
+  echo "  ✓ RTK initialized."
+fi
+
 echo ""
 echo "✅ Setup complete."
 echo ""
